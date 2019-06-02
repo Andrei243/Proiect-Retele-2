@@ -14,8 +14,7 @@ tcp.sport =5000 # un port la aleger
 tcp.dport =5000 # portul destinatie pe care ruleaza serverul
 tcp.seq =50 # un sequence number la alegere
 tcp.flags = 'S'
-valoare = struct.pack("!B",2)
-tcp.options=[('MSS',valoare)]
+
 tcp.show()
 
 
@@ -29,7 +28,7 @@ tcp.ack = rasp_ack
 tcp.flags = 'A'
 
 ACK= ip / tcp
-raspuns_ACK = sr1(ACK)
+send(ACK)
 data=[]
 data.append('a')
 data.append('b')
@@ -38,6 +37,9 @@ data.append('def')
 for dat in data:
     tcp.seq = tcp.seq + 1
     tcp.ack = raspuns_ACK.seq + 1
+    valoare = struct.pack("!B", 2)
+    tcp.flags="PA"
+    tcp.options = [('MSS', valoare)]
     mesaj = ip / tcp / dat
     mesaj.show()
     raspuns_ACK = sr1(mesaj)
