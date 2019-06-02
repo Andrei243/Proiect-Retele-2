@@ -6,7 +6,7 @@ import struct
 
 ip = IP()
 ip.src ="172.11.0.14" # ip-ul nostru
-ip.dst ="172.11.0.13" # ip-ul serverului
+ip.dst ="198.13.0.14" # ip-ul serverului
 ip.show()
 
 tcp = TCP()

@@ -9,7 +9,7 @@ logging.basicConfig(format = u'[LINE:%(lineno)d]# %(levelname)-8s [%(asctime)s] 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 port = 5000
-adresa = '172.11.0.13'
+adresa = 'localhost'
 server_address = (adresa, port)
 sock.bind(server_address)
 logging.info("Serverul a pornit pe %s si portul %d", adresa, port)
