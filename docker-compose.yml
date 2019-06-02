@@ -16,6 +16,8 @@ services:
         networks:
             net:
               ipv4_address: 198.12.0.14
+            dmz:
+              ipv4_address: 172.11.0.13
         depends_on:
             - "router"
     middle:
