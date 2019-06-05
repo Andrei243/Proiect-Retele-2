@@ -4,18 +4,24 @@
 from scapy.all import *
 import struct
 
+optiune = 'MSS'
+op_index = TCPOptions[1][optiune]
+op_format = TCPOptions[0][op_index]
+valoare = struct.pack(op_format[1], 2)
+
 ip = IP()
-ip.src ="172.11.0.14" # ip-ul nostru
+ip.src ="172.111.0.14" # ip-ul nostru
 ip.dst ="198.13.0.14" # ip-ul serverului
-ip.show()
+
 
 tcp = TCP()
 tcp.sport =5000 # un port la aleger
-tcp.dport =5000 # portul destinatie pe care ruleaza serverul
+tcp.dport =10000 # portul destinatie pe care ruleaza serverul
 tcp.seq =50 # un sequence number la alegere
 tcp.flags = 'S'
+tcp.option = [(optiune, valoare)]
 
-tcp.show()
+# tcp.show()
 
 
 SYN = ip/tcp
@@ -36,10 +42,8 @@ data.append('c')
 data.append('def')
 for dat in data:
     tcp.seq = tcp.seq + 1
-    tcp.ack = raspuns_ACK.seq + 1
-    valoare = struct.pack("!B", 2)
+    tcp.ack = tcp.seq + 1
     tcp.flags="PA"
-    tcp.options = [('MSS', valoare)]
     mesaj = ip / tcp / dat
     mesaj.show()
     raspuns_ACK = sr1(mesaj)
@@ -50,6 +54,12 @@ tcp.flags='FA'
 
 FIN=ip/tcp
 raspuns_FIN=sr1(FIN)
+
+tcp.seq=tcp.seq+1
+tcp.ack=raspuns_FIN.seq+1
+tcp.flags='A'
+FINACK=ip/tcp
+send(FINACK)
 
 
 

