@@ -28,7 +28,7 @@ SYN = ip/tcp
 SYN.show()
 raspuns_SYN_ACK = sr1(SYN)
 rasp_ack = raspuns_SYN_ACK.seq + 1
-rasp_seq = tcp.seq + 1
+rasp_seq = raspuns_SYN_ACK.ack + 1
 tcp.seq = rasp_seq
 tcp.ack = rasp_ack
 tcp.flags = 'A'
@@ -40,25 +40,31 @@ data.append('a')
 data.append('b')
 data.append('c')
 data.append('def')
+raspuns_ACK=None
 for dat in data:
-    tcp.seq = tcp.seq + 1
-    tcp.ack = tcp.seq + 1
+    if raspuns_ACK is None:
+        tcp.seq =52
+        tcp.ack =raspuns_SYN_ACK.seq + 1
+    else:
+        tcp.seq+=1
+
     tcp.flags="PA"
     mesaj = ip / tcp / dat
     mesaj.show()
     raspuns_ACK = sr1(mesaj)
 
 tcp.seq=tcp.seq+1
-tcp.ack=raspuns_ACK.seq+1
 tcp.flags='FA'
 
 FIN=ip/tcp
+FIN.show()
 raspuns_FIN=sr1(FIN)
+raspuns_FIN.show()
 
 tcp.seq=tcp.seq+1
-tcp.ack=raspuns_FIN.seq+1
 tcp.flags='A'
 FINACK=ip/tcp
+FINACK.show()
 send(FINACK)
 
 

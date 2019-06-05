@@ -20,9 +20,8 @@ print("Am ajuns aici")
 
 logging.info("Handshake cu %s", address)
 while True:
-
+    conexiune.send("Q")
     data = conexiune.recv(1)
     logging.info('Content primit: "%s"', data)
-    conexiune.send("Q")
 conexiune.close()
 sock.close()
